@@ -1,0 +1,29 @@
+from collections import deque
+
+def solve_8_puzzle(start, goal):
+    queue = deque([(start, [])])
+    visited = set()
+    moves = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    
+    while queue:
+        board, path = queue.popleft()
+        if board == goal:
+            return path
+        zero = board.index(0)
+        x, y = zero // 3, zero % 3
+        
+        for dx, dy in moves:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < 3 and 0 <= ny < 3:
+                nz = nx * 3 + ny
+                new_board = list(board)
+                new_board[zero], new_board[nz] = new_board[nz], new_board[zero]
+                new_state = tuple(new_board)
+                if new_state not in visited:
+                    visited.add(new_state)
+                    queue.append((new_state, path + [(dx, dy)]))
+    return None
+
+start = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+print(solve_8_puzzle(start, goal))
