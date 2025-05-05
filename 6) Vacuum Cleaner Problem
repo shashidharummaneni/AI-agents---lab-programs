@@ -1,0 +1,31 @@
+def vacuum_cleaner():
+    from collections import deque
+    states = [(0, 'A', 'B'), (1, 'A', 'B')]
+    queue = deque([(states[0], [])])
+    visited = set()
+    
+    while queue:
+        state, path = queue.popleft()
+        if state[1] == 'Clean' and state[2] == 'Clean':
+            return path
+        if state in visited:
+            continue
+        visited.add(state)
+        
+        pos, a, b = state
+        moves = []
+        if pos == 0:
+            if a == 'Dirty':
+                moves.append((0, 'Clean', b, 'Suck'))
+            moves.append((1, a, b, 'Right'))
+        else:
+            if b == 'Dirty':
+                moves.append((1, a, 'Clean', 'Suck'))
+            moves.append((0, a, b, 'Left'))
+        
+        for new_pos, new_a, new_b, action in moves:
+            new_state = (new_pos, new_a, new_b)
+            queue.append((new_state, path + [action]))
+    return None
+
+print(vacuum_cleaner())
