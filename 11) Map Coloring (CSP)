@@ -1,0 +1,29 @@
+def map_coloring():
+    colors = ['Red', 'Green', 'Blue']
+    regions = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+    neighbors = {
+        'WA': ['NT', 'SA'],
+        'NT': ['WA', 'SA', 'Q'],
+        'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+        'Q': ['NT', 'SA', 'NSW'],
+        'NSW': ['Q', 'SA', 'V'],
+        'V': ['SA', 'NSW'],
+        'T': []
+    }
+    
+    def backtrack(assignment):
+        if len(assignment) == len(regions):
+            return assignment
+        var = next(r for r in regions if r not in assignment)
+        for color in colors:
+            if all(assignment.get(neigh) != color for neigh in neighbors[var]):
+                assignment[var] = color
+                result = backtrack(assignment)
+                if result is not None:
+                    return result
+                del assignment[var]
+        return None
+    
+    return backtrack({})
+
+print(map_coloring())
