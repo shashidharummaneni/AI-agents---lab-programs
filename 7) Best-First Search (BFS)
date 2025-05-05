@@ -1,0 +1,28 @@
+import heapq
+
+def best_first_search(graph, start, goal, heuristic):
+    heap = [(heuristic[start], start, [])]
+    visited = set()
+    
+    while heap:
+        h, node, path = heapq.heappop(heap)
+        if node == goal:
+            return path + [node]
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                heapq.heappush(heap, (heuristic[neighbor], neighbor, path + [node]))
+    return None
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+heuristic = {'A': 6, 'B': 4, 'C': 3, 'D': 2, 'E': 2, 'F': 0}
+print(best_first_search(graph, 'A', 'F', heuristic))
