@@ -1,0 +1,29 @@
+from collections import deque
+
+def water_jug_problem(cap_x, cap_y, target):
+    visited = set()
+    queue = deque([(0, 0, [])])
+    
+    while queue:
+        x, y, path = queue.popleft()
+        if x == target or y == target:
+            return path
+        if (x, y) in visited:
+            continue
+        visited.add((x, y))
+        
+        states = [
+            (cap_x, y, 'Fill X'),
+            (x, cap_y, 'Fill Y'),
+            (0, y, 'Empty X'),
+            (x, 0, 'Empty Y'),
+            (x - min(x, cap_y - y), y + min(x, cap_y - y), 'X to Y'),
+            (x + min(y, cap_x - x), y - min(y, cap_x - x), 'Y to X')
+        ]
+        
+        for nx, ny, action in states:
+            if (nx, ny) not in visited:
+                queue.append((nx, ny, path + [action]))
+    return None
+
+print(water_jug_problem(4, 3, 2))
